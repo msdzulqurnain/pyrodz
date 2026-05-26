@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+storage/logs/*.log
+
+# Environment
+.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checker
+.mypy_cache/
+
+# PyInstaller
+*.spec
+
+# Local database
+*.sqlite
+*.db
+database/*.sqlite
+storage/*.sqlite
+
+# Generated bot cache
+storage/cache/
+storage/sessions/
