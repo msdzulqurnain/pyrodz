@@ -1,0 +1,12 @@
+pyrogram
+tgcrypto
+python-dotenv
+
+# Optional — uncomment for MySQL support
+# pymysql
+
+# Optional — uncomment for PostgreSQL support
+# psycopg2-binary
+
+# Optional — uncomment for MongoDB support
+# pymongo
