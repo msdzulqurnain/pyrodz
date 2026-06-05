@@ -264,9 +264,7 @@ await message.reply("Welcome!", reply_markup=Button.url("GitHub", "https://githu
 from framework import Btn, Buttons
 
 Buttons(
-    Btn.cb("Yes", "confirm_yes"),
-    Btn.cb("No", "confirm_no"),
-    /
+    Btn.cb("Yes", "confirm_yes") / Btn.cb("No", "confirm_no"),
     Btn.url("Cancel", "https://...")
 )
 ```
