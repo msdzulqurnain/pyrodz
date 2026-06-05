@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Changelog** — `CHANGELOG.md` with version history
 - **Update system** — `pyrodz update` fetches and applies latest framework code from the original GitHub repository; supports `--check` flag for dry-run version checking
 - **Version info** — `pyrodz --version` / `pyrodz -v` displays current framework version and mode
 
@@ -14,6 +15,10 @@
 ### Fixed
 
 - `App.ENV` now reads from `.env` correctly via `load_dotenv()` in `App.py`
+- `Btn` / `_RowBreak` chaining — `_RowBreak` now supports `__truediv__` so `Btn.cb("A") / Btn.cb("B") / Btn.cb("C")` works correctly
+- `Buttons()` recursive flattening — nested `_RowBreak` from multi-chaining is flattened properly
+- Error messages in buttons module changed from Indonesian to English
+- README button example corrected — standalone `/` replaced with `Btn.cb() / Btn.cb()` syntax
 
 ## v0.2.0-beta (2026-05-26)
 
