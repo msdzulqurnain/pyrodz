@@ -3,6 +3,11 @@ class _RowBreak:
         self.left = left
         self.right = right
 
+    def __truediv__(self, other):
+        if isinstance(other, (Btn, _RowBreak)):
+            return _RowBreak(self, other)
+        raise TypeError("Btn can only be separated with Btn using /")
+
 
 class Btn:
     def __init__(self, button):
@@ -12,7 +17,7 @@ class Btn:
         if isinstance(other, Btn):
             return _RowBreak(self, other)
 
-        raise TypeError("Btn hanya bisa dipisah dengan Btn menggunakan /")
+        raise TypeError("Btn can only be separated with Btn using /")
 
     @classmethod
     def cb(cls, text: str, data: str):
@@ -135,17 +140,22 @@ def Buttons(*items):
     rows = []
     current = []
 
-    for item in items:
+    def _process(item):
         if isinstance(item, Btn):
             current.append(item.button)
 
         elif isinstance(item, _RowBreak):
-            current.append(item.left.button)
-            rows.append(current)
-            current = [item.right.button]
+            _process(item.left)
+            if current:
+                rows.append(current[:])
+                current.clear()
+            _process(item.right)
 
         else:
-            raise TypeError("Buttons hanya menerima Btn")
+            raise TypeError("Buttons only accepts Btn objects")
+
+    for item in items:
+        _process(item)
 
     if current:
         rows.append(current)
