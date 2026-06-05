@@ -535,29 +535,6 @@ Optional (uncomment in `requirements.txt`):
 - `psycopg2-binary` — PostgreSQL driver
 - `pymongo` — MongoDB driver
 
-## 📝 Changelog
-
-### v0.2.0 (beta)
-
-- Added multi-driver SQL database (SQLite, MySQL, PostgreSQL) with QueryBuilder, Model, Schema, and Migrations
-- Added MongoDB support via native PyMongo
-- Added CLI commands: `make:model`, `make:migration`, `migrate`, `migrate rollback`, `make:db`
-- Added Logging system with dual console + file output
-- Added grammar-per-driver architecture for SQL compilation
-- Moved Pyrogram sessions to `storage/sessions/`
-- Renamed CLI from `dz` to `pyrodz`, `serve` to `start`
-- CLI help now grouped by category
-
-### v0.1.0
-
-- Foundation: routing, CLI, screen rendering, button builder, filters
-- CLI commands: `start`, `route:list`, `make:command`, `make:callback`
-- Regex data markers (`$`) and `data()` helper (`_1`–`_5`)
-- FilterProxy with composable filters
-- Inline keyboard builder (`Btn`, `Buttons`)
-- Screen-returning handlers with dynamic module import
-- Scaffolding via `make:command` and `make:callback`
-
 ## 📝 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
