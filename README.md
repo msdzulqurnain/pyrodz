@@ -53,6 +53,10 @@ python3 pyrodz start
 | `pyrodz migrate` | Run all pending migrations |
 | `pyrodz migrate rollback` | Rollback the last migration batch |
 | `pyrodz make:db` | Initialize the database |
+| `pyrodz update` | Update the framework to the latest version |
+| `pyrodz update --check` | Check for updates without applying |
+| `pyrodz --version` | Show framework version |
+| `pyrodz -v` | Show framework version (short) |
 
 ## 🏗 Architecture
 
@@ -260,9 +264,7 @@ await message.reply("Welcome!", reply_markup=Button.url("GitHub", "https://githu
 from framework import Btn, Buttons
 
 Buttons(
-    Btn.cb("Yes", "confirm_yes"),
-    Btn.cb("No", "confirm_no"),
-    /
+    Btn.cb("Yes", "confirm_yes") / Btn.cb("No", "confirm_no"),
     Btn.url("Cancel", "https://...")
 )
 ```

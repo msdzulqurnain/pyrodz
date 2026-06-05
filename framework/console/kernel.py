@@ -38,12 +38,16 @@ class Kernel:
             "framework.console.commands.make_db.MakeDb",
             "Initialize the database",
         ),
+        "update": (
+            "framework.console.commands.update.Update",
+            "Update the framework to the latest version",
+        ),
     }
 
     groups = [
         (
             "Run & Debug",
-            ["start", "route:list"],
+            ["start", "route:list", "update"],
         ),
         (
             "Scaffolding",
@@ -59,11 +63,15 @@ class Kernel:
         ("migrate rollback", "Rollback the last migration batch"),
     ]
 
-    no_args = {"start", "route:list", "migrate", "make:db"}
+    no_args = {"start", "route:list", "migrate", "make:db", "update"}
 
     def handle(self):
         if len(sys.argv) < 2:
             self.show_help()
+            return
+
+        if sys.argv[1] in ("--version", "-v"):
+            print(f"PyroDZ v{Style.FRAMEWORK_VERSION} ({Style.MODE})")
             return
 
         command_name = sys.argv[1]
