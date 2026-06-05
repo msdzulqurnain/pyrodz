@@ -48,4 +48,5 @@ storage/*.sqlite
 
 # Generated bot cache
 storage/cache/
-storage/sessions/
+storage/sessions/*
+!storage/sessions/.gitkeep
