@@ -151,6 +151,18 @@ def Buttons(*items):
                 current.clear()
             _process(item.right)
 
+        elif isinstance(item, (list, tuple)):
+            if current:
+                rows.append(current[:])
+                current.clear()
+            processed = []
+            for b in item:
+                if isinstance(b, Btn):
+                    processed.append(b.button)
+                else:
+                    processed.append(b)
+            rows.append(processed)
+
         else:
             raise TypeError("Buttons only accepts Btn objects")
 
