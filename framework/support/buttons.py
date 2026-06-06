@@ -159,6 +159,8 @@ def Buttons(*items):
             for b in item:
                 if isinstance(b, Btn):
                     processed.append(b.button)
+                elif isinstance(b, _RowBreak):
+                    raise TypeError("_RowBreak not allowed inside list. Use Btn directly.")
                 else:
                     processed.append(b)
             rows.append(processed)
