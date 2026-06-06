@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.1 (2026-06-06)
+
+### Added
+
+- **List/tuple row support** — `Buttons()` now accepts `[list]` and `(tuple)` for explicit row grouping; each list becomes a single row, useful for dynamic button generation
+
+### Fixed
+
+- Explicit `TypeError` when `_RowBreak` is used inside a list — clear error message guides users to use `Btn` directly
+
 ## v0.2.0 (2026-06-06)
 
 ### Added

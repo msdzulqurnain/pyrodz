@@ -284,10 +284,10 @@ Use `Btn` inside `Buttons(...)` for composing multiple buttons. Use `Button` sho
 
 `Buttons(...)` offers two ways to create rows:
 
-| Syntax | Contoh | Hasil |
+| Syntax | Example | Result |
 |---|---|---|
-| **`/` operator** | `Btn.cb("A") / Btn.cb("B")` | Row 1: `[A]`, Row 2: `[B]` + button berikutnya nempel ke Row 2 |
-| **`[list]` / `(tuple)`** | `[Btn.cb("A"), Btn.cb("B")]` | Satu row eksplisit `[A, B]` — langsung flush, ga nempel dengan row sebelumnya |
+| **`/` operator** | `Btn.cb("A") / Btn.cb("B")` | Row 1: `[A]`, Row 2: `[B]` — subsequent buttons append to Row 2 |
+| **`[list]` / `(tuple)`** | `[Btn.cb("A"), Btn.cb("B")]` | Single explicit row `[A, B]` — flushes immediately, does not merge with previous row |
 
 ```python
 Buttons(

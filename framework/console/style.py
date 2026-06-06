@@ -16,7 +16,7 @@ class Style:
     GRAY = "\033[38;5;244m"
     WHITE = "\033[38;5;255m"
 
-    FRAMEWORK_VERSION = "0.2.0"
+    FRAMEWORK_VERSION = "0.2.1"
     MODE = App.ENV
 
     @classmethod
