@@ -282,7 +282,24 @@ Buttons(
 
 Use `Btn` inside `Buttons(...)` for composing multiple buttons. Use `Button` shorthand for a single button — it returns the markup directly.
 
-Use `/` to start a new row. `Buttons(...)` returns a list of lists ready for `reply_markup=`.
+`Buttons(...)` offers two ways to create rows:
+
+| Syntax | Example | Result |
+|---|---|---|
+| **`/` operator** | `Btn.cb("A") / Btn.cb("B")` | Row 1: `[A]`, Row 2: `[B]` — subsequent buttons append to Row 2 |
+| **`[list]` / `(tuple)`** | `[Btn.cb("A"), Btn.cb("B")]` | Single explicit row `[A, B]` — flushes immediately, does not merge with previous row |
+
+```python
+Buttons(
+    Btn.cb("Prev") / Btn.cb("Next"),      # Row 1: [Prev], Row 2: [Next]
+    Btn.url("Settings"),                   # Row 2: [Next, Settings]
+    [Btn.cb("Refresh")],                   # Row 3: [Refresh]
+)
+```
+
+Use **`/`** for inline row breaks where subsequent buttons keep appending to the new row. Use **`[list]`** for explicit rows — useful when building rows dynamically from loops or generators.
+
+`Buttons(...)` returns a list of lists ready for `reply_markup=`.
 
 ## 🚫 Filters
 
