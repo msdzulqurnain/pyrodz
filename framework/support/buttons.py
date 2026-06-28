@@ -99,39 +99,167 @@ class Btn:
             )
         )
 
+    @classmethod
+    def chosen_chat(cls, text: str, query: str = "", allow_user: bool = True, allow_bot: bool = False, allow_group: bool = True, allow_channel: bool = False):
+        from pyrogram.types import InlineKeyboardButton, SwitchInlineQueryChosenChat
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                switch_inline_query_chosen_chat=SwitchInlineQueryChosenChat(
+                    query=query,
+                    allow_user_chats=allow_user,
+                    allow_bot_chats=allow_bot,
+                    allow_group_chats=allow_group,
+                    allow_channel_chats=allow_channel,
+                ),
+            )
+        )
+
+    @classmethod
+    def copy_text(cls, text: str, copy_text: str):
+        from pyrogram.types import InlineKeyboardButton, CopyTextButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                copy_text=CopyTextButton(text=copy_text),
+            )
+        )
+
+    @classmethod
+    def pay(cls, text: str):
+        from pyrogram.types import InlineKeyboardButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                pay=True,
+            )
+        )
+
+    @classmethod
+    def cb_pass(cls, text: str, data: str):
+        from pyrogram.types import InlineKeyboardButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                callback_data_with_password=data.encode(),
+            )
+        )
+
+    def emoji(self, emoji_id: str):
+        self.button.icon_custom_emoji_id = emoji_id
+        return self
+
+    def style(self, style):
+        from pyrogram.enums import ButtonStyle
+        if isinstance(style, str):
+            style = ButtonStyle[style.upper()]
+        self.button.style = style
+        return self
+
+    def primary(self):
+        return self.style("PRIMARY")
+
+    def success(self):
+        return self.style("SUCCESS")
+
+    def danger(self):
+        return self.style("DANGER")
+
+    def default(self):
+        return self.style("DEFAULT")
+
+
+class _ButtonBuilder:
+    def __init__(self, btn: Btn):
+        self._btn = btn
+
+    def _build(self):
+        from pyrogram.types import InlineKeyboardMarkup
+
+        rows = [[self._btn.button]]
+        return InlineKeyboardMarkup(rows)
+
+    async def write(self, client):
+        markup = self._build()
+        return await markup.write(client)
+
+    @property
+    def inline_keyboard(self):
+        return self._build().inline_keyboard
+
+    def emoji(self, emoji_id: str):
+        self._btn.emoji(emoji_id)
+        return self
+
+    def style(self, style):
+        self._btn.style(style)
+        return self
+
+    def primary(self):
+        self._btn.primary()
+        return self
+
+    def success(self):
+        self._btn.success()
+        return self
+
+    def danger(self):
+        self._btn.danger()
+        return self
+
+    def default(self):
+        self._btn.default()
+        return self
+
 
 class Button:
     @staticmethod
     def cb(text: str, data: str):
-        return Buttons(Btn.cb(text, data))
+        return _ButtonBuilder(Btn.cb(text, data))
 
     @staticmethod
     def url(text: str, url: str):
-        return Buttons(Btn.url(text, url))
+        return _ButtonBuilder(Btn.url(text, url))
 
     @staticmethod
     def user(text: str, user_id: int):
-        return Buttons(Btn.user(text, user_id))
+        return _ButtonBuilder(Btn.user(text, user_id))
 
     @staticmethod
     def inline(text: str, value: str = ""):
-        return Buttons(Btn.inline(text, value))
+        return _ButtonBuilder(Btn.inline(text, value))
 
     @staticmethod
     def current(text: str, value: str = ""):
-        return Buttons(Btn.current(text, value))
+        return _ButtonBuilder(Btn.current(text, value))
 
     @staticmethod
     def login(text: str, url: str):
-        return Buttons(Btn.login(text, url))
+        return _ButtonBuilder(Btn.login(text, url))
 
     @staticmethod
     def webapp(text: str, url: str):
-        return Buttons(Btn.webapp(text, url))
+        return _ButtonBuilder(Btn.webapp(text, url))
 
     @staticmethod
     def game(text: str):
-        return Buttons(Btn.game(text))
+        return _ButtonBuilder(Btn.game(text))
+
+    @staticmethod
+    def chosen_chat(text: str, query: str = "", allow_user: bool = True, allow_bot: bool = False, allow_group: bool = True, allow_channel: bool = False):
+        return _ButtonBuilder(Btn.chosen_chat(text, query, allow_user, allow_bot, allow_group, allow_channel))
+
+    @staticmethod
+    def copy_text(text: str, copy_text: str):
+        return _ButtonBuilder(Btn.copy_text(text, copy_text))
+
+    @staticmethod
+    def pay(text: str):
+        return _ButtonBuilder(Btn.pay(text))
+
+    @staticmethod
+    def cb_pass(text: str, data: str):
+        return _ButtonBuilder(Btn.cb_pass(text, data))
 
 
 def Buttons(*items):

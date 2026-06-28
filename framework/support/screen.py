@@ -15,5 +15,5 @@ _4 = 4
 _5 = 5
 
 
-def data(callback_query, n):
-    return callback_query.matches[0].group(n)
+def data(update, n):
+    return update.matches[0].group(n)

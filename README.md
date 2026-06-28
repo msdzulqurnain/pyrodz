@@ -3,9 +3,9 @@
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-beta-green)
-[![Pyrogram](https://img.shields.io/badge/pyrogram-v2-blueviolet)](https://github.com/pyrogram/pyrogram)
+[![PyroTGFork](https://img.shields.io/badge/pyrotgfork-v2-blueviolet)](https://github.com/TelegramPlayGround/PyroTGFork)
 
-PyroDZ is a Python framework for building Telegram bots, built on top of [Pyrogram](https://github.com/pyrogram/pyrogram). It provides a structured, CLI-driven development experience with routing, handler scaffolding, database abstraction, screen rendering, and more — so you can focus on your bot's logic instead of boilerplate.
+PyroDZ is a Python framework for building Telegram bots, built on top of [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork) (a maintained fork of Pyrogram). It provides a structured, CLI-driven development experience with routing, handler scaffolding, database abstraction, screen rendering, and more — so you can focus on your bot's logic instead of boilerplate.
 
 - **🏷 CLI-first** — `pyrodz start`, `pyrodz make:command`, `pyrodz route:list`, `pyrodz migrate` — all bot management from the terminal
 - **📁 Structured project** — Handlers, config, routes, models, migrations, and screens in a clean directory layout
@@ -63,7 +63,7 @@ python3 pyrodz start
 ### Request Flow
 
 ```
-Telegram ──► Pyrogram Client
+Telegram ──► Client
                    │
             App.wrap_handler()
                    │
@@ -104,8 +104,8 @@ Telegram ──► Pyrogram Client
 | **Router** | `framework/router.py` | Matches incoming updates to registered routes |
 | **Handlers** | `app/Handlers/*.py` | Business logic — decides what to respond |
 | **Screens** | `screen/*.py` | Rendering — builds the actual message content |
-| **Filters** | `app/Support/Filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
-| **App** | `core/app.py` | Wraps Pyrogram Client, hooks into update handling |
+| **Filters** | `framework/support/filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
+| **App** | `core/app.py` | Wraps PyroTGFork Client, hooks into update handling |
 | **Database** | `framework/database/` | QueryBuilder, Model, Schema, Migration, MongoDB |
 
 ## 🧰 Routing
@@ -124,23 +124,28 @@ from framework.route import Route
 | `Route.callback(data, handler)` | Callback button tap | Button click handling |
 | `Route.inline(handler)` | `@bot query` in chat | Inline mode queries |
 | `Route.regex(pattern, handler)` | Callback data matching regex | Dynamic callback data with `$` markers |
+| `Route.message(handler, filter)` | Any incoming message | Text, photo, video, document, etc. |
+| `Route.message(pattern, handler, filter)` | Message matching pattern | Text with `$` data markers |
 
 ### Examples
 
 #### Command route with filter
 
 ```python
-from app.Support.Filters import private, text, group
+from framework import private, text, group
 
 Route.command("start", StartHandler.start, private & text)
 ```
 
-The optional third parameter is a filter. Only updates that pass the filter trigger the handler. Import filters directly from `app.Support.Filters`:
+The optional third parameter is a filter. Only updates that pass the filter trigger the handler. Import filters directly from `framework`:
 
 - `private` — only private chats
 - `group` — only groups
 - `supergroup` — only supergroups
 - `text` — only text messages
+- `photo` — only photo messages
+- `video` — only video messages
+- `document` — only document messages
 
 Composable with `&` (AND), `|` (OR), `~` (NOT).
 
@@ -167,6 +172,24 @@ Route.regex("broadcast_$_$", BroadcastHandler.handle)
 ```
 
 The `$` marker is automatically converted to a capture group `(.+)`. Use the `data()` helper in your screen to extract the captured groups.
+
+#### Message route
+
+```python
+from framework import photo, video, document, text
+
+Route.message(handler, photo)
+Route.message(handler, video)
+Route.message(handler, document)
+
+# With pattern and data markers
+Route.message("order_$", OrderHandler.detail, text)
+
+# Catch-all (any message type)
+Route.message(handler)
+```
+
+Fires on any incoming message. Use the optional filter to narrow by type (`photo`, `video`, `document`, `text`, etc.) or a pattern with `$` markers for text extraction. Without a filter, it acts as a catch-all for every message.
 
 ## 📋 Handlers
 
@@ -279,6 +302,33 @@ Buttons(
 | `Btn.login(label, url)` / `Button.login(label, url)` | `login_url` | Button for authorization |
 | `Btn.webapp(label, url)` / `Button.webapp(label, url)` | `web_app` | Button that opens a Web App |
 | `Btn.game(label)` / `Button.game(label)` | `callback_game` | Button that launches a game |
+| `Btn.chosen_chat(label, query)` / `Button.chosen_chat(label, query)` | `switch_inline_query_chosen_chat` | Button that opens an inline query with chat selector |
+| `Btn.copy_text(label, text)` / `Button.copy_text(label, text)` | `copy_text` | Button that copies text to clipboard |
+| `Btn.pay(label)` / `Button.pay(label)` | `pay` | Payment button (requires invoice message) |
+| `Btn.cb_pass(label, data)` / `Button.cb_pass(label, data)` | `callback_data_with_password` | Callback button requiring 2FA password |
+
+All `Btn` and `Button` methods support chaining for style and emoji:
+
+```python
+Btn.url("GitHub", "https://github.com").success().emoji("5234...")
+Btn.cb("Confirm", "confirm").primary()
+Btn.cb("Delete", "delete").danger()
+Btn.pay("Bayar").success().emoji("5234...")
+
+Button.url("GitHub", "https://github.com").success().emoji("5234...")
+Button.cb("Confirm", "confirm").primary()
+Button.cb("Delete", "delete").danger()
+Button.pay("Bayar").success().emoji("5234...")
+```
+
+| Chaining method | Description |
+|---|---|
+| `.emoji(id)` | Set custom emoji icon (from @Stickers) |
+| `.style(name)` | Set button style — `"DEFAULT"`, `"PRIMARY"`, `"DANGER"`, `"SUCCESS"` |
+| `.primary()` | Shorthand for `.style("PRIMARY")` |
+| `.success()` | Shorthand for `.style("SUCCESS")` |
+| `.danger()` | Shorthand for `.style("DANGER")` |
+| `.default()` | Shorthand for `.style("DEFAULT")` |
 
 Use `Btn` inside `Buttons(...)` for composing multiple buttons. Use `Button` shorthand for a single button — it returns the markup directly.
 
@@ -304,7 +354,7 @@ Use **`/`** for inline row breaks where subsequent buttons keep appending to the
 ## 🚫 Filters
 
 ```python
-from app.Support.Filters import private, text, group, supergroup
+from framework import private, text, group, supergroup
 
 private & text               # private chat + text only
 group | supergroup           # all group types
@@ -521,7 +571,7 @@ MONGO_DATABASE=pyrodz
 ├── pyrodz                  # CLI entry point
 ├── LICENSE                 # MIT License
 ├── core/
-│   └── app.py              # App class (extends Pyrogram Client)
+│   └── app.py              # App class (extends PyroTGFork Client)
 ├── framework/
 │   ├── support/            # Screen, Buttons, Log, helpers
 │   ├── console/            # CLI kernel and commands
@@ -532,8 +582,7 @@ MONGO_DATABASE=pyrodz
 │   ├── Config/             # Configuration from .env
 │   ├── Handlers/           # Command and callback handlers
 │   ├── Models/             # Database models
-│   ├── Migrations/         # Database migration files
-│   └── Support/            # FilterProxy and app-specific helpers
+│   └── Migrations/         # Database migration files
 ├── screen/                 # Screen rendering modules
 └── storage/                # Logs, sessions, database files
     ├── logs/
@@ -543,8 +592,8 @@ MONGO_DATABASE=pyrodz
 ## 🏷 Requirements
 
 - Python 3.8+
-- [Pyrogram](https://github.com/pyrogram/pyrogram)
-- [Tgcrypto](https://github.com/pyrogram/tgcrypto)
+- [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork) (maintained fork of Pyrogram)
+- [Tgcrypto](https://github.com/TelegramPlayGround/pyrogram-tgcrypto)
 - [python-dotenv](https://github.com/theskumar/python-dotenv)
 
 Optional (uncomment in `requirements.txt`):
