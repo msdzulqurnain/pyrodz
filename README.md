@@ -307,6 +307,29 @@ Buttons(
 | `Btn.pay(label)` / `Button.pay(label)` | `pay` | Payment button (requires invoice message) |
 | `Btn.cb_pass(label, data)` / `Button.cb_pass(label, data)` | `callback_data_with_password` | Callback button requiring 2FA password |
 
+All `Btn` and `Button` methods support chaining for style and emoji:
+
+```python
+Btn.url("GitHub", "https://github.com").success().emoji("5234...")
+Btn.cb("Confirm", "confirm").primary()
+Btn.cb("Delete", "delete").danger()
+Btn.pay("Bayar").success().emoji("5234...")
+
+Button.url("GitHub", "https://github.com").success().emoji("5234...")
+Button.cb("Confirm", "confirm").primary()
+Button.cb("Delete", "delete").danger()
+Button.pay("Bayar").success().emoji("5234...")
+```
+
+| Chaining method | Description |
+|---|---|
+| `.emoji(id)` | Set custom emoji icon (from @Stickers) |
+| `.style(name)` | Set button style — `"DEFAULT"`, `"PRIMARY"`, `"DANGER"`, `"SUCCESS"` |
+| `.primary()` | Shorthand for `.style("PRIMARY")` |
+| `.success()` | Shorthand for `.style("SUCCESS")` |
+| `.danger()` | Shorthand for `.style("DANGER")` |
+| `.default()` | Shorthand for `.style("DEFAULT")` |
+
 Use `Btn` inside `Buttons(...)` for composing multiple buttons. Use `Button` shorthand for a single button — it returns the markup directly.
 
 `Buttons(...)` offers two ways to create rows:
@@ -559,7 +582,7 @@ MONGO_DATABASE=pyrodz
 │   ├── Config/             # Configuration from .env
 │   ├── Handlers/           # Command and callback handlers
 │   ├── Models/             # Database models
-    │   └── Migrations/         # Database migration files
+│   └── Migrations/         # Database migration files
 ├── screen/                 # Screen rendering modules
 └── storage/                # Logs, sessions, database files
     ├── logs/
