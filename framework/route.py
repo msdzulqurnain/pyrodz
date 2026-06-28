@@ -50,3 +50,23 @@ class Route:
             "method": "current",
             "filters": filters,
         })
+
+    @staticmethod
+    def message(*args, **kwargs):
+        if args and callable(args[0]):
+            pattern = None
+            handler = args[0]
+            extra = kwargs.get("filters")
+        elif len(args) >= 2 and isinstance(args[0], str) and callable(args[1]):
+            pattern = args[0]
+            handler = args[1]
+            extra = kwargs.get("filters", args[2] if len(args) > 2 else None)
+        else:
+            raise TypeError("Route.message() expects (pattern, handler, filters=None) or (handler, filters=None)")
+
+        routes.append({
+            "type": "message",
+            "pattern": pattern,
+            "handler": handler,
+            "filters": extra,
+        })

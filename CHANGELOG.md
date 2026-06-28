@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.2.2-beta (2026-06-06)
+
+### Added
+
+- **Message handler** — `Route.message()` handles any incoming message type (text, photo, video, document, etc.) with optional pattern matching and `$` data markers; supports filter composition via `filters=` parameter
+- **New button types** — `Btn.chosen_chat()` (`switch_inline_query_chosen_chat`), `Btn.copy_text()` (`copy_text`), `Btn.pay()` (`pay`), `Btn.cb_pass()` (`callback_data_with_password`) — plus corresponding `Button.chosen_chat()` etc. shorthand
+- **Button style chaining** — `.emoji()`, `.style()`, `.primary()`, `.success()`, `.danger()`, `.default()` methods on `Btn` and `Button` for custom emoji and button colors
+
+### Changed
+
+- **Migrated from Pyrogram to [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork)** — switched dependency from `pyrogram` to `pyrotgfork`; updated documentation badges, links, and user-facing messages; all existing `from pyrogram import ...` code continues to work as PyroTGFork maintains the same namespace
+- **Moved `FilterProxy` to `framework/support/filters.py`** — deleted `app/Support/Filters.py`; filters are now importable via `from framework import private, text, photo, ...`
+- `data()` helper now accepts both `CallbackQuery` and `Message` objects (parameter renamed from `callback_query` to `update`)
+
 ## v0.2.1 (2026-06-06)
 
 ### Added
