@@ -9,6 +9,7 @@
 ### Changed
 
 - **Migrated from Pyrogram to [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork)** — switched dependency from `pyrogram` to `pyrotgfork`; updated documentation badges, links, and user-facing messages; all existing `from pyrogram import ...` code continues to work as PyroTGFork maintains the same namespace
+- **Moved `FilterProxy` to `framework/support/filters.py`** — deleted `app/Support/Filters.py`; filters are now importable via `from framework import private, text, photo, ...`
 - `data()` helper now accepts both `CallbackQuery` and `Message` objects (parameter renamed from `callback_query` to `update`)
 
 ## v0.2.1 (2026-06-06)

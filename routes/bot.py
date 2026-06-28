@@ -1,5 +1,5 @@
+from framework import private, text
 from framework.route import Route
-from app.Support.Filters import private, text
 
 from app.Handlers.StartHandler import StartHandler
 from app.Handlers.SearchHandler import SearchHandler

@@ -104,7 +104,7 @@ Telegram ──► Client
 | **Router** | `framework/router.py` | Matches incoming updates to registered routes |
 | **Handlers** | `app/Handlers/*.py` | Business logic — decides what to respond |
 | **Screens** | `screen/*.py` | Rendering — builds the actual message content |
-| **Filters** | `app/Support/Filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
+| **Filters** | `framework/support/filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
 | **App** | `core/app.py` | Wraps PyroTGFork Client, hooks into update handling |
 | **Database** | `framework/database/` | QueryBuilder, Model, Schema, Migration, MongoDB |
 
@@ -132,12 +132,12 @@ from framework.route import Route
 #### Command route with filter
 
 ```python
-from app.Support.Filters import private, text, group
+from framework import private, text, group
 
 Route.command("start", StartHandler.start, private & text)
 ```
 
-The optional third parameter is a filter. Only updates that pass the filter trigger the handler. Import filters directly from `app.Support.Filters`:
+The optional third parameter is a filter. Only updates that pass the filter trigger the handler. Import filters directly from `framework`:
 
 - `private` — only private chats
 - `group` — only groups
@@ -176,7 +176,7 @@ The `$` marker is automatically converted to a capture group `(.+)`. Use the `da
 #### Message route
 
 ```python
-from app.Support.Filters import photo, video, document, text
+from framework import photo, video, document, text
 
 Route.message(handler, photo)
 Route.message(handler, video)
@@ -327,7 +327,7 @@ Use **`/`** for inline row breaks where subsequent buttons keep appending to the
 ## 🚫 Filters
 
 ```python
-from app.Support.Filters import private, text, group, supergroup
+from framework import private, text, group, supergroup
 
 private & text               # private chat + text only
 group | supergroup           # all group types
