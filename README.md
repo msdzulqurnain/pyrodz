@@ -302,6 +302,10 @@ Buttons(
 | `Btn.login(label, url)` / `Button.login(label, url)` | `login_url` | Button for authorization |
 | `Btn.webapp(label, url)` / `Button.webapp(label, url)` | `web_app` | Button that opens a Web App |
 | `Btn.game(label)` / `Button.game(label)` | `callback_game` | Button that launches a game |
+| `Btn.chosen_chat(label, query)` / `Button.chosen_chat(label, query)` | `switch_inline_query_chosen_chat` | Button that opens an inline query with chat selector |
+| `Btn.copy_text(label, text)` / `Button.copy_text(label, text)` | `copy_text` | Button that copies text to clipboard |
+| `Btn.pay(label)` / `Button.pay(label)` | `pay` | Payment button (requires invoice message) |
+| `Btn.cb_pass(label, data)` / `Button.cb_pass(label, data)` | `callback_data_with_password` | Callback button requiring 2FA password |
 
 Use `Btn` inside `Buttons(...)` for composing multiple buttons. Use `Button` shorthand for a single button — it returns the markup directly.
 
@@ -555,8 +559,7 @@ MONGO_DATABASE=pyrodz
 │   ├── Config/             # Configuration from .env
 │   ├── Handlers/           # Command and callback handlers
 │   ├── Models/             # Database models
-│   ├── Migrations/         # Database migration files
-│   └── Support/            # FilterProxy and app-specific helpers
+    │   └── Migrations/         # Database migration files
 ├── screen/                 # Screen rendering modules
 └── storage/                # Logs, sessions, database files
     ├── logs/

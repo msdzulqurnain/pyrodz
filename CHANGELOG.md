@@ -5,6 +5,7 @@
 ### Added
 
 - **Message handler** — `Route.message()` handles any incoming message type (text, photo, video, document, etc.) with optional pattern matching and `$` data markers; supports filter composition via `filters=` parameter
+- **New button types** — `Btn.chosen_chat()` (`switch_inline_query_chosen_chat`), `Btn.copy_text()` (`copy_text`), `Btn.pay()` (`pay`), `Btn.cb_pass()` (`callback_data_with_password`) — plus corresponding `Button.chosen_chat()` etc. shorthand
 
 ### Changed
 

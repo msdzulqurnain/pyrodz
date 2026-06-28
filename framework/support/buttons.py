@@ -99,6 +99,52 @@ class Btn:
             )
         )
 
+    @classmethod
+    def chosen_chat(cls, text: str, query: str = "", allow_user: bool = True, allow_bot: bool = False, allow_group: bool = True, allow_channel: bool = False):
+        from pyrogram.types import InlineKeyboardButton, SwitchInlineQueryChosenChat
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                switch_inline_query_chosen_chat=SwitchInlineQueryChosenChat(
+                    query=query,
+                    allow_user_chats=allow_user,
+                    allow_bot_chats=allow_bot,
+                    allow_group_chats=allow_group,
+                    allow_channel_chats=allow_channel,
+                ),
+            )
+        )
+
+    @classmethod
+    def copy_text(cls, text: str, copy_text: str):
+        from pyrogram.types import InlineKeyboardButton, CopyTextButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                copy_text=CopyTextButton(text=copy_text),
+            )
+        )
+
+    @classmethod
+    def pay(cls, text: str):
+        from pyrogram.types import InlineKeyboardButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                pay=True,
+            )
+        )
+
+    @classmethod
+    def cb_pass(cls, text: str, data: str):
+        from pyrogram.types import InlineKeyboardButton
+        return cls(
+            InlineKeyboardButton(
+                text=text,
+                callback_data_with_password=data.encode(),
+            )
+        )
+
 
 class Button:
     @staticmethod
@@ -132,6 +178,22 @@ class Button:
     @staticmethod
     def game(text: str):
         return Buttons(Btn.game(text))
+
+    @staticmethod
+    def chosen_chat(text: str, query: str = "", allow_user: bool = True, allow_bot: bool = False, allow_group: bool = True, allow_channel: bool = False):
+        return Buttons(Btn.chosen_chat(text, query, allow_user, allow_bot, allow_group, allow_channel))
+
+    @staticmethod
+    def copy_text(text: str, copy_text: str):
+        return Buttons(Btn.copy_text(text, copy_text))
+
+    @staticmethod
+    def pay(text: str):
+        return Buttons(Btn.pay(text))
+
+    @staticmethod
+    def cb_pass(text: str, data: str):
+        return Buttons(Btn.cb_pass(text, data))
 
 
 def Buttons(*items):
