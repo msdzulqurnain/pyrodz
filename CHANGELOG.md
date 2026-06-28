@@ -2,9 +2,14 @@
 
 ## v0.2.2-beta (2026-06-06)
 
+### Added
+
+- **Message handler** — `Route.message()` handles any incoming message type (text, photo, video, document, etc.) with optional pattern matching and `$` data markers; supports filter composition via `filters=` parameter
+
 ### Changed
 
 - **Migrated from Pyrogram to [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork)** — switched dependency from `pyrogram` to `pyrotgfork`; updated documentation badges, links, and user-facing messages; all existing `from pyrogram import ...` code continues to work as PyroTGFork maintains the same namespace
+- `data()` helper now accepts both `CallbackQuery` and `Message` objects (parameter renamed from `callback_query` to `update`)
 
 ## v0.2.1 (2026-06-06)
 

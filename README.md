@@ -124,6 +124,8 @@ from framework.route import Route
 | `Route.callback(data, handler)` | Callback button tap | Button click handling |
 | `Route.inline(handler)` | `@bot query` in chat | Inline mode queries |
 | `Route.regex(pattern, handler)` | Callback data matching regex | Dynamic callback data with `$` markers |
+| `Route.message(handler, filter)` | Any incoming message | Text, photo, video, document, etc. |
+| `Route.message(pattern, handler, filter)` | Message matching pattern | Text with `$` data markers |
 
 ### Examples
 
@@ -141,6 +143,9 @@ The optional third parameter is a filter. Only updates that pass the filter trig
 - `group` — only groups
 - `supergroup` — only supergroups
 - `text` — only text messages
+- `photo` — only photo messages
+- `video` — only video messages
+- `document` — only document messages
 
 Composable with `&` (AND), `|` (OR), `~` (NOT).
 
@@ -167,6 +172,24 @@ Route.regex("broadcast_$_$", BroadcastHandler.handle)
 ```
 
 The `$` marker is automatically converted to a capture group `(.+)`. Use the `data()` helper in your screen to extract the captured groups.
+
+#### Message route
+
+```python
+from app.Support.Filters import photo, video, document, text
+
+Route.message(handler, photo)
+Route.message(handler, video)
+Route.message(handler, document)
+
+# With pattern and data markers
+Route.message("order_$", OrderHandler.detail, text)
+
+# Catch-all (any message type)
+Route.message(handler)
+```
+
+Fires on any incoming message. Use the optional filter to narrow by type (`photo`, `video`, `document`, `text`, etc.) or a pattern with `$` markers for text extraction. Without a filter, it acts as a catch-all for every message.
 
 ## 📋 Handlers
 

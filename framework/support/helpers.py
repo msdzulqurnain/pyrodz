@@ -140,6 +140,24 @@ def register_routes(app, routes):
 
             app.on_callback_query(route_filter)(wrap(handler))
 
+        elif route["type"] == "message":
+            pattern = route.get("pattern")
+
+            if pattern:
+                if "$" in pattern:
+                    pattern = parse_data_marker(pattern)
+
+                route_filter = pyro_filters.regex(pattern)
+
+                if extra_filter:
+                    route_filter = route_filter & extra_filter
+
+                app.on_message(route_filter)(wrap(handler))
+            elif extra_filter:
+                app.on_message(extra_filter)(wrap(handler))
+            else:
+                app.on_message()(wrap(handler))
+
         elif route["type"] == "inline":
             if extra_filter:
                 app.on_inline_query(extra_filter)(wrap(handler))
