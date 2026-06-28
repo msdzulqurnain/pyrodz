@@ -3,9 +3,9 @@
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-beta-green)
-[![Pyrogram](https://img.shields.io/badge/pyrogram-v2-blueviolet)](https://github.com/pyrogram/pyrogram)
+[![PyroTGFork](https://img.shields.io/badge/pyrotgfork-v2-blueviolet)](https://github.com/TelegramPlayGround/PyroTGFork)
 
-PyroDZ is a Python framework for building Telegram bots, built on top of [Pyrogram](https://github.com/pyrogram/pyrogram). It provides a structured, CLI-driven development experience with routing, handler scaffolding, database abstraction, screen rendering, and more — so you can focus on your bot's logic instead of boilerplate.
+PyroDZ is a Python framework for building Telegram bots, built on top of [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork) (a maintained fork of Pyrogram). It provides a structured, CLI-driven development experience with routing, handler scaffolding, database abstraction, screen rendering, and more — so you can focus on your bot's logic instead of boilerplate.
 
 - **🏷 CLI-first** — `pyrodz start`, `pyrodz make:command`, `pyrodz route:list`, `pyrodz migrate` — all bot management from the terminal
 - **📁 Structured project** — Handlers, config, routes, models, migrations, and screens in a clean directory layout
@@ -63,7 +63,7 @@ python3 pyrodz start
 ### Request Flow
 
 ```
-Telegram ──► Pyrogram Client
+Telegram ──► Client
                    │
             App.wrap_handler()
                    │
@@ -105,7 +105,7 @@ Telegram ──► Pyrogram Client
 | **Handlers** | `app/Handlers/*.py` | Business logic — decides what to respond |
 | **Screens** | `screen/*.py` | Rendering — builds the actual message content |
 | **Filters** | `app/Support/Filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
-| **App** | `core/app.py` | Wraps Pyrogram Client, hooks into update handling |
+| **App** | `core/app.py` | Wraps PyroTGFork Client, hooks into update handling |
 | **Database** | `framework/database/` | QueryBuilder, Model, Schema, Migration, MongoDB |
 
 ## 🧰 Routing
@@ -521,7 +521,7 @@ MONGO_DATABASE=pyrodz
 ├── pyrodz                  # CLI entry point
 ├── LICENSE                 # MIT License
 ├── core/
-│   └── app.py              # App class (extends Pyrogram Client)
+│   └── app.py              # App class (extends PyroTGFork Client)
 ├── framework/
 │   ├── support/            # Screen, Buttons, Log, helpers
 │   ├── console/            # CLI kernel and commands
@@ -543,8 +543,8 @@ MONGO_DATABASE=pyrodz
 ## 🏷 Requirements
 
 - Python 3.8+
-- [Pyrogram](https://github.com/pyrogram/pyrogram)
-- [Tgcrypto](https://github.com/pyrogram/tgcrypto)
+- [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork) (maintained fork of Pyrogram)
+- [Tgcrypto](https://github.com/TelegramPlayGround/pyrogram-tgcrypto)
 - [python-dotenv](https://github.com/theskumar/python-dotenv)
 
 Optional (uncomment in `requirements.txt`):

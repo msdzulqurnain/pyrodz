@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2-beta (2026-06-06)
+
+### Changed
+
+- **Migrated from Pyrogram to [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork)** — switched dependency from `pyrogram` to `pyrotgfork`; updated documentation badges, links, and user-facing messages; all existing `from pyrogram import ...` code continues to work as PyroTGFork maintains the same namespace
+
 ## v0.2.1 (2026-06-06)
 
 ### Added
