@@ -11,6 +11,7 @@ DRIVERS = {
     "sqlite": SqliteDriver,
     "mysql": MysqlDriver,
     "pgsql": PostgresDriver,
+    "postgres": PostgresDriver,
 }
 
 

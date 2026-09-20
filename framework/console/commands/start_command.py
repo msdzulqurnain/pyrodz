@@ -1,6 +1,6 @@
 from pyrogram import Client
 
-from core.app import App
+from core.app import BotApp
 from app.Config.Bot import Bot
 from framework.console.style import Style
 
@@ -18,7 +18,7 @@ class StartCommand:
         print()
 
         try:
-            App().run()
+            BotApp().run()
         except KeyboardInterrupt:
             print()
             print(Style.warn("Bot stopped"))

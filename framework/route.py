@@ -1,10 +1,10 @@
-routes = []
+route_registry = []
 
 
 class Route:
     @staticmethod
     def command(name, handler, filters=None):
-        routes.append({
+        route_registry.append({
             "type": "command",
             "name": name,
             "handler": handler,
@@ -12,38 +12,32 @@ class Route:
         })
 
     @staticmethod
-    def callback(name, handler, filters=None):
-        routes.append({
+    def callback(name, handler, filters=None, regex=False):
+        route_registry.append({
             "type": "callback",
             "name": name,
             "handler": handler,
             "filters": filters,
-            "regex": False,
+            "regex": bool(regex),
         })
 
     @staticmethod
     def regex(pattern, handler, filters=None):
-        routes.append({
-            "type": "callback",
-            "name": pattern,
-            "handler": handler,
-            "filters": filters,
-            "regex": True,
-        })
+        return Route.callback(pattern, handler, filters, regex=True)
 
     @staticmethod
     def inline(handler, filters=None):
-        routes.append({
+        route_registry.append({
             "type": "inline",
             "name": "[inline query]",
             "handler": handler,
             "method": "inline",
             "filters": filters,
         })
-    
+
     @staticmethod
     def current(handler, filters=None):
-        routes.append({
+        route_registry.append({
             "type": "inline",
             "name": "[current inline query]",
             "handler": handler,
@@ -56,7 +50,7 @@ class Route:
         if args and callable(args[0]):
             pattern = None
             handler = args[0]
-            extra = kwargs.get("filters")
+            extra = kwargs.get("filters", args[1] if len(args) > 1 else None)
         elif len(args) >= 2 and isinstance(args[0], str) and callable(args[1]):
             pattern = args[0]
             handler = args[1]
@@ -64,9 +58,12 @@ class Route:
         else:
             raise TypeError("Route.message() expects (pattern, handler, filters=None) or (handler, filters=None)")
 
-        routes.append({
+        route_registry.append({
             "type": "message",
             "pattern": pattern,
             "handler": handler,
             "filters": extra,
         })
+
+
+routes = route_registry
