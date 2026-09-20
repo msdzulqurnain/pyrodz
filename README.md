@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-beta-green)
+![Status](https://img.shields.io/badge/status-stable-blue)
 [![PyroTGFork](https://img.shields.io/badge/pyrotgfork-v2-blueviolet)](https://github.com/TelegramPlayGround/PyroTGFork)
 
 PyroDZ is a Python framework for building Telegram bots, built on top of [PyroTGFork](https://github.com/TelegramPlayGround/PyroTGFork) (a maintained fork of Pyrogram). It provides a structured, CLI-driven development experience with routing, handler scaffolding, database abstraction, screen rendering, and more — so you can focus on your bot's logic instead of boilerplate.
@@ -65,7 +65,7 @@ python3 pyrodz start
 ```
 Telegram ──► Client
                    │
-            App.wrap_handler()
+            BotApp.wrap_handler()
                    │
               ┌────▼────┐
               │  Router  │  match by command / callback / regex / inline
@@ -105,7 +105,7 @@ Telegram ──► Client
 | **Handlers** | `app/Handlers/*.py` | Business logic — decides what to respond |
 | **Screens** | `screen/*.py` | Rendering — builds the actual message content |
 | **Filters** | `framework/support/filters.py` | Pre-conditions for route matching (`private`, `group`, `text`, etc.) |
-| **App** | `core/app.py` | Wraps PyroTGFork Client, hooks into update handling |
+| **App** | `core/app.py` | `BotApp` — wraps PyroTGFork Client, hooks into update handling |
 | **Database** | `framework/database/` | QueryBuilder, Model, Schema, Migration, MongoDB |
 
 ## 🧰 Routing
@@ -123,7 +123,7 @@ from framework.route import Route
 | `Route.command(cmd, handler, filter)` | `/command` in chat | Bot commands like `/start`, `/help` |
 | `Route.callback(data, handler)` | Callback button tap | Button click handling |
 | `Route.inline(handler)` | `@bot query` in chat | Inline mode queries |
-| `Route.regex(pattern, handler)` | Callback data matching regex | Dynamic callback data with `$` markers |
+| `Route.regex(pattern, handler)` | Callback data matching regex | Dynamic callback data with `$` markers (alias for `Route.callback(..., regex=True)`) |
 | `Route.message(handler, filter)` | Any incoming message | Text, photo, video, document, etc. |
 | `Route.message(pattern, handler, filter)` | Message matching pattern | Text with `$` data markers |
 
@@ -168,10 +168,11 @@ Fires when a user types `@bot query...` in any chat.
 #### Regex route with data markers
 
 ```python
-Route.regex("broadcast_$_$", BroadcastHandler.handle)
+Route.callback("broadcast_$_$", BroadcastHandler.handle, regex=True)
+# atau via alias: Route.regex("broadcast_$_$", BroadcastHandler.handle)
 ```
 
-The `$` marker is automatically converted to a capture group `(.+)`. Use the `data()` helper in your screen to extract the captured groups.
+The `$` marker is automatically converted to a capture group `(.+)`. Use the `capture()` helper in your screen to extract the captured groups.
 
 #### Message route
 
@@ -250,15 +251,15 @@ async def help(client, message):
 
 ### Extracting data from callback regex matches
 
-When a route uses `$` markers, the matched capture groups are available through `data()`:
+When a route uses `$` markers, the matched capture groups are available through `capture()`:
 
 ```python
-from framework import data, _1, _2, _3, _4, _5
+from framework import capture, _1, _2, _3, _4, _5
 
 
 async def broadcast(client, callback_query):
-    target = data(callback_query, _1)
-    action = data(callback_query, _2)
+    target = capture(callback_query, _1)
+    action = capture(callback_query, _2)
 ```
 
 | Helper | Maps to | Example pattern | Captured value |
@@ -269,7 +270,7 @@ async def broadcast(client, callback_query):
 | `_4` | `match.group(4)` | `"$_$_$_$"` | Fourth segment |
 | `_5` | `match.group(5)` | `"$_$_$_$_$"` | Fifth segment |
 
-The `data(callback_query, n)` function internally retrieves the cached regex match from the callback query's state and calls `.group(n)`.
+The `capture(update, n)` function internally reads `update.matches[0]` and calls `.group(n)` — works for both `CallbackQuery` and `Message`. `data(update, n)` remains as a deprecated alias for `capture()`.
 
 ## 🖱 Inline Keyboard Builder
 
@@ -528,7 +529,7 @@ The `mongo` object is a lazy singleton — it only connects to MongoDB on the fi
 ## 📝 Logging
 
 ```python
-from framework.support.Log import Log
+from framework import Log
 
 Log.info("Bot started")
 Log.warning("Slow query detected")
@@ -571,9 +572,10 @@ MONGO_DATABASE=pyrodz
 ├── pyrodz                  # CLI entry point
 ├── LICENSE                 # MIT License
 ├── core/
-│   └── app.py              # App class (extends PyroTGFork Client)
+│   └── app.py              # BotApp class (extends PyroTGFork Client)
 ├── framework/
-│   ├── support/            # Screen, Buttons, Log, helpers
+│   ├── router.py           # Register & dispatch routes to handlers
+│   ├── support/            # Screen, Buttons, log, filters, helpers shim
 │   ├── console/            # CLI kernel and commands
 │   └── database/           # QueryBuilder, Model, Schema, Migration
 ├── routes/

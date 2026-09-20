@@ -1,7 +1,7 @@
 from .support.buttons import Button, Btn, Buttons
 from .support.filters import private, group, supergroup, text, photo, video, document
-from .support.screen import screen, ScreenResponse, data, _1, _2, _3, _4, _5
-from .support.Log import Log
+from .support.screen import screen, ScreenResponse, capture, data, _1, _2, _3, _4, _5
+from .support.log import Log
 
 __all__ = [
     "screen",
@@ -10,6 +10,7 @@ __all__ = [
     "Btn",
     "Buttons",
     "Log",
+    "capture",
     "data",
     "_1",
     "_2",

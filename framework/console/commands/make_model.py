@@ -13,7 +13,7 @@ class MakeModel(Command):
         name = args[0]
 
         if not self.is_valid_class_name(name):
-            self.invalid_name(name, "Model")
+            self.print_invalid_name(name, "Model")
             return
 
         path = Path("app/Models") / f"{name}.py"

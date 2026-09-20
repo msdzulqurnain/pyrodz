@@ -33,10 +33,10 @@ class SchemaBuilder:
         self._driver_type = self._detect_driver()
 
     def _detect_driver(self):
-        name = type(self._driver).__name__
-        if "Mysql" in name:
+        module = type(self._driver).__module__.rsplit(".", 1)[-1]
+        if module == "mysql":
             return "mysql"
-        if "Postgres" in name:
+        if module == "postgres":
             return "pgsql"
         return "sqlite"
 

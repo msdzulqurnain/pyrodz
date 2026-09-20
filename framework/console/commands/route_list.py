@@ -1,6 +1,6 @@
 import routes.bot
 
-from framework.route import routes
+from framework.route import route_registry
 from framework.console.style import Style
 
 
@@ -10,23 +10,23 @@ class RouteList:
         print(Style.info("Registered routes"))
         print()
 
-        if not routes:
+        if not route_registry:
             print(Style.warn("No routes registered"))
             return
 
         self.print_header()
 
         sorted_routes = sorted(
-            routes,
+            route_registry,
             key=lambda route: (
                 route["type"] != "command",
-                route["name"]
+                route.get("name") or route.get("pattern") or ""
             )
         )
 
         for route in sorted_routes:
             route_type = route["type"].upper()
-            name = route["name"]
+            name = route.get("name") or route.get("pattern") or "-"
             raw_handler = route["handler"]
             filters = self.format_filter(route.get("filters"))
 
