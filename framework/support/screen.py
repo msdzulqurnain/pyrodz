@@ -15,5 +15,8 @@ _4 = 4
 _5 = 5
 
 
-def data(update, n):
+def capture(update, n):
     return update.matches[0].group(n)
+
+
+data = capture

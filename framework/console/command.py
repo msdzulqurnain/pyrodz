@@ -16,7 +16,7 @@ class Command:
     def is_valid_class_name(self, name):
         return bool(re.match(r"^[A-Z][a-zA-Z0-9]*$", name))
     
-    def invalid_name(self, name, suffix):
+    def print_invalid_name(self, name, suffix):
         print()
         print(
             Style.error(

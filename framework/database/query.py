@@ -48,8 +48,8 @@ class QueryBuilder:
         rows = self.get()
         return rows[0] if rows else None
 
-    def find(self, id):
-        return self.where("id", id).first()
+    def find(self, id, primary_key="id"):
+        return self.where(primary_key, id).first()
 
     def count(self):
         sql, params = self._grammar.compile_count()

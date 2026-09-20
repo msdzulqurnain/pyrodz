@@ -1,5 +1,32 @@
 # Changelog
 
+## v0.2.2 (2026-09-21) — API Cleanup & Stability
+
+### Added
+
+- **`capture(update, n)`** — official name for the former `data()` helper; `data()` remains as a deprecated alias; works for both `CallbackQuery` and `Message`
+- **`Route.callback(..., regex=True)`** — explicit way to register regex callbacks; `Route.regex()` becomes a deprecated alias
+- **`ModelQuery`** — `Model.all()` and `Model.where().get()` now return **Model instances** (hydrated); raw dict rows are available via `.get(raw=True)`
+- **`QueryBuilder.find(id, primary_key="id")`** — primary key column configurable per call
+- **`postgres` driver alias** — `DB_CONNECTION=postgres` maps to `pgsql`; Schema driver detection is now type-based instead of class-name string matching
+
+### Changed
+
+- **`App` → `BotApp`** in `core/app.py` (import `BotApp` from `core.app`)
+- **`routes` → `route_registry`** in `framework/route.py` — `routes` kept as an alias
+- **Logging module relocated** — `framework/support/Log.py` → `framework/support/log.py` (`from framework import Log` unchanged)
+- **Routing logic extracted from helpers** — `framework/support/helpers.py` split into `framework/router.py` (`import_routes`, `register_routes`, `bind_handler`, `parse_data_marker`, `send_error`, `handle_response`); `helpers.py` remains as a deprecated shim
+- **`invalid_name` → `print_invalid_name`** in `framework/console/command.py`
+
+### Fixed
+
+- **Positional filter `Route.message(handler, filter)`** — the positional filter was previously ignored (only the `filters=` keyword argument was read); both forms now work
+- **`route:list` crash on `message` routes** — routes of type `message` (which have `pattern` instead of `name`) now display correctly
+
+### Note
+
+- `Route.current` and the `Btn.cb`/`_ButtonBuilder` naming are intentionally left unchanged (user decision)
+
 ## v0.2.2-beta (2026-06-06)
 
 ### Added

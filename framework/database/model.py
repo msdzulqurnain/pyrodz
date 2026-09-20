@@ -4,6 +4,25 @@ from .manager import ConnectionManager
 from .query import QueryBuilder
 
 
+class ModelQuery(QueryBuilder):
+    def __init__(self, driver, table, model_cls):
+        super().__init__(driver, table)
+        self._model_cls = model_cls
+
+    def get(self, raw=False):
+        rows = super().get()
+
+        if raw:
+            return rows
+
+        return [self._model_cls._hydrate(row) for row in rows]
+
+    def first(self, raw=False):
+        self.limit(1)
+        rows = self.get(raw=raw)
+        return rows[0] if rows else None
+
+
 class Model:
     table = None
     fillable = []
@@ -39,18 +58,18 @@ class Model:
     @classmethod
     def _new_query(cls):
         driver = ConnectionManager().driver()
-        return QueryBuilder(driver, cls.table)
+        return ModelQuery(driver, cls.table, cls)
+
+    @classmethod
+    def _hydrate(cls, row):
+        instance = cls(row)
+        instance._exists = True
+        return instance
 
     @classmethod
     def find(cls, id):
-        row = cls._new_query().where(cls.primary_key, id).first()
-
-        if row:
-            instance = cls(row)
-            instance._exists = True
-            return instance
-
-        return None
+        row = cls._new_query().where(cls.primary_key, id).first(raw=True)
+        return cls._hydrate(row) if row else None
 
     @classmethod
     def create(cls, data=None, **kwargs):

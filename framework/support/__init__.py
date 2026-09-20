@@ -1,5 +1,5 @@
 from .buttons import Button, Btn, Buttons
-from .Log import Log
+from .log import Log
 from .filters import FilterProxy, private, group, supergroup, text, photo, video, document
 
 __all__ = [

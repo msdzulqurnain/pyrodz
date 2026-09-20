@@ -15,7 +15,7 @@ class MakeCallback(Command):
         raw_name = args[0]
 
         if not self.is_valid_class_name(raw_name):
-            self.invalid_name(raw_name, self.SUFFIX)
+            self.print_invalid_name(raw_name, self.SUFFIX)
             return
 
         if raw_name.endswith(self.SUFFIX):
